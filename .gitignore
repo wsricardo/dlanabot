@@ -2,4 +2,4 @@
 *.pyc
 
 # Ignore folders
-src/tests
+tests/
