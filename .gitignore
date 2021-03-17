@@ -3,3 +3,5 @@
 
 # Ignore folders
 tests/
+dev/
+__pycache__/

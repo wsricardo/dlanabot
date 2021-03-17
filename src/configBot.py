@@ -1,5 +1,5 @@
 confbot = {
-        "bot_name":"",
+        "bot_name":"DLana",
         "token":"your_token",
         "descrition": "Assistente virtual. Chatbot",
         "info":  [

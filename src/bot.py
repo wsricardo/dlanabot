@@ -22,10 +22,10 @@ bot.
 """
 
 import logging
-import json
-
 from telegram import Update
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters, CallbackContext
+from commandsBot import*
+import dataBot
 
 # Enable logging
 logging.basicConfig(
@@ -35,62 +35,34 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
-# Get data file for infos
-def getData():
-    pass
-
-# Natural Language input/output
-def nlOut(msg: str) -> str:
-    return 'x'
-
-# Consulta
-def consult(update: Update, context: CallbackContext) -> str:
-    return ''
-
-# Define a few command handlers. These usually take the two arguments update and
-# context. Error handlers also receive the raised TelegramError object in error.
-def start(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /start is issued."""
-    update.message.reply_text('Hi!')
-
-
-def help_command(update: Update, context: CallbackContext) -> None:
-    """Send a message when the command /help is issued."""
-    update.message.reply_text('Help!')
-
-
-def echo(update: Update, context: CallbackContext) -> None:
-    """Echo the user message."""
-    update.message.reply_text(update.message.text)
-
-def speak(inbot: str, context: CallbackContext) -> None:
-    outbot = ''
-    update.message.reply_text(outbot)
-
-def getName(update: Update, context: CallbackContext) -> None:
-    update.message.reply_text("WandriBot")
-
-
 def main():
     """Start the bot."""
     import configBot
-    print(configBot.confbot['bot_name'],configBot.confbot['info']) 
+    print(configBot.confbot['bot_name'],configBot.confbot['info'], configBot.confbot['token'])
+    
     
     # Create the Updater and pass it your bot's token.
     #updater = Updater("TOKEN")
     updater = Updater(configBot.confbot['token'])
-
+    # State bot ask or normal. "0" for normal and "1" for 'ask' bot questions.
+    stateBot = 0
+    registerBot(configBot, updater, stateBot)
+    
 
     # Get the dispatcher to register handlers
     dispatcher = updater.dispatcher
 
     # on different commands - answer in Telegram
     dispatcher.add_handler(CommandHandler("start", start))
-    dispatcher.add_handler(CommandHandler("help", help_command))
+    dispatcher.add_handler(CommandHandler("ajuda", help_command))
     dispatcher.add_handler(CommandHandler("name", getName))
+    dispatcher.add_handler(CommandHandler("listar", listar))
+    dispatcher.add_handler(CommandHandler("menu", mainMenu))
+    dispatcher.add_handler(CommandHandler("pesquisar", search))
+    dispatcher.add_handler(CommandHandler("retirada", retirada))
 
     # on noncommand i.e message - echo the message on Telegram
-    dispatcher.add_handler(MessageHandler(Filters.text & ~Filters.command, echo))
+    dispatcher.add_handler(MessageHandler((Filters.text & ~Filters.command), echo))
 
     # Start the Bot
     updater.start_polling()
